@@ -1,15 +1,13 @@
 package de.cidaas.jwt;
 
-import de.cidaas.jwt.algorithms.Algorithm;
-import de.cidaas.jwt.exceptions.JWTCreationException;
-import de.cidaas.jwt.exceptions.SignatureGenerationException;
-import de.cidaas.jwt.impl.ClaimsHolder;
-import de.cidaas.jwt.impl.PayloadSerializer;
-import de.cidaas.jwt.impl.PublicClaims;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -18,11 +16,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.apache.commons.codec.binary.Base64;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import de.cidaas.jwt.algorithms.Algorithm;
+import de.cidaas.jwt.exceptions.JWTCreationException;
+import de.cidaas.jwt.exceptions.SignatureGenerationException;
+import de.cidaas.jwt.impl.ClaimsHolder;
+import de.cidaas.jwt.impl.PayloadSerializer;
+import de.cidaas.jwt.impl.PublicClaims;
 
 /**
  * The JWTCreator class holds the sign method to generate a complete JWT (with
