@@ -23,10 +23,4 @@ class NoneAlgorithm extends Algorithm {
     public byte[] sign(byte[] headerBytes, byte[] payloadBytes) throws SignatureGenerationException {
         return new byte[0];
     }
-
-    @Override
-    @Deprecated
-    public byte[] sign(byte[] contentBytes) throws SignatureGenerationException {
-        return new byte[0];
-    }
 }

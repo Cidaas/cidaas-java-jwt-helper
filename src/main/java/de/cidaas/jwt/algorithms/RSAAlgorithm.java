@@ -1,17 +1,17 @@
 package de.cidaas.jwt.algorithms;
 
-import de.cidaas.jwt.exceptions.SignatureGenerationException;
-import de.cidaas.jwt.exceptions.SignatureVerificationException;
-import de.cidaas.jwt.interfaces.DecodedJWT;
-import de.cidaas.jwt.interfaces.RSAKeyProvider;
-import org.apache.commons.codec.binary.Base64;
-
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+
+import org.apache.commons.codec.binary.Base64;
+
+import de.cidaas.jwt.exceptions.SignatureGenerationException;
+import de.cidaas.jwt.exceptions.SignatureVerificationException;
+import de.cidaas.jwt.interfaces.DecodedJWT;
+import de.cidaas.jwt.interfaces.RSAKeyProvider;
 
 class RSAAlgorithm extends Algorithm {
 
@@ -51,7 +51,6 @@ class RSAAlgorithm extends Algorithm {
     }
 
     @Override
-    @Deprecated
     public byte[] sign(byte[] headerBytes, byte[] payloadBytes) throws SignatureGenerationException {
         try {
             RSAPrivateKey privateKey = keyProvider.getPrivateKey();
@@ -59,19 +58,6 @@ class RSAAlgorithm extends Algorithm {
                 throw new IllegalStateException("The given Private Key is null.");
             }
             return crypto.createSignatureFor(getDescription(), privateKey, headerBytes, payloadBytes);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IllegalStateException e) {
-            throw new SignatureGenerationException(this, e);
-        }
-    }
-    
-    @Override
-    public byte[] sign(byte[] contentBytes) throws SignatureGenerationException {
-        try {
-            RSAPrivateKey privateKey = keyProvider.getPrivateKey();
-            if (privateKey == null) {
-                throw new IllegalStateException("The given Private Key is null.");
-            }
-            return crypto.createSignatureFor(getDescription(), privateKey, contentBytes);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | IllegalStateException e) {
             throw new SignatureGenerationException(this, e);
         }
