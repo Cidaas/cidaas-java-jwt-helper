@@ -1,9 +1,18 @@
 include:
-  - project: 'widas/codequality'
+  - project: widas/software-quality/gitlab-template-projects/widas-customer-ci-templates
     ref: master
-    file: 'ci_templates/java.gitlab-ci.yml'
+    file: java/java-mvn-lib.yml
 
 stages:
   - test
+  - build
+  - release
   - badges
   - deploy
+
+test:
+  extends: .test
+
+maven_build:
+  extends: build
+  image: maven:3-openjdk-11

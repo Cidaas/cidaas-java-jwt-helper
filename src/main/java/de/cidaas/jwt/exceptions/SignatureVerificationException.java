@@ -1,7 +1,6 @@
 package de.cidaas.jwt.exceptions;
 
 import de.cidaas.jwt.algorithms.Algorithm;
-import de.cidaas.jwt.exceptions.JWTVerificationException;
 
 public class SignatureVerificationException extends JWTVerificationException {
     public SignatureVerificationException(Algorithm algorithm) {

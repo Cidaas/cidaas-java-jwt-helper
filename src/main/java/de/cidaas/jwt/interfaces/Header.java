@@ -1,7 +1,5 @@
 package de.cidaas.jwt.interfaces;
 
-import de.cidaas.jwt.interfaces.Claim;
-
 /**
  * The Header class represents the 1st part of the JWT, where the Header value is hold.
  */

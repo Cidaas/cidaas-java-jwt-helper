@@ -1,47 +1,61 @@
 package de.cidaas.jwt;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.apache.commons.codec.binary.Base64;
+
 import de.cidaas.jwt.algorithms.Algorithm;
 import de.cidaas.jwt.exceptions.JWTCreationException;
 import de.cidaas.jwt.exceptions.SignatureGenerationException;
 import de.cidaas.jwt.impl.ClaimsHolder;
 import de.cidaas.jwt.impl.PayloadSerializer;
 import de.cidaas.jwt.impl.PublicClaims;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.apache.commons.codec.binary.Base64;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * The JWTCreator class holds the sign method to generate a complete JWT (with Signature) from a given Header and Payload content.
+ * The JWTCreator class holds the sign method to generate a complete JWT (with
+ * Signature) from a given Header and Payload content.
  */
 @SuppressWarnings("WeakerAccess")
 public final class JWTCreator {
+
+    static class SortingNodeFactory extends JsonNodeFactory {
+        @Override
+        public ObjectNode objectNode() {
+            return new ObjectNode(this, new TreeMap<String, JsonNode>());
+        }
+    }
 
     private final Algorithm algorithm;
     private final String headerJson;
     private final String payloadJson;
 
-    private JWTCreator(Algorithm algorithm, Map<String, Object> headerClaims, Map<String, Object> payloadClaims) throws JWTCreationException {
+    private JWTCreator(Algorithm algorithm, Map<String, Object> headerClaims, Map<String, Object> payloadClaims)
+            throws JWTCreationException {
         this.algorithm = algorithm;
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            // new ObjectMapper() which support ordering
+            ObjectMapper mapper = JsonMapper.builder().nodeFactory(new SortingNodeFactory()).build();
             SimpleModule module = new SimpleModule();
             module.addSerializer(ClaimsHolder.class, new PayloadSerializer());
             mapper.registerModule(module);
-            mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
             headerJson = mapper.writeValueAsString(headerClaims);
             payloadJson = mapper.writeValueAsString(new ClaimsHolder(payloadClaims));
         } catch (JsonProcessingException e) {
             throw new JWTCreationException("Some of the Claims couldn't be converted to a valid JSON format.", e);
         }
     }
-
 
     /**
      * Initialize a JWTCreator instance.
@@ -77,7 +91,9 @@ public final class JWTCreator {
 
         /**
          * Add a specific Key Id ("kid") claim to the Header.
-         * If the {@link Algorithm} used to sign this token was instantiated with a KeyProvider, the 'kid' value will be taken from that provider and this one will be ignored.
+         * If the {@link Algorithm} used to sign this token was instantiated with a
+         * KeyProvider, the 'kid' value will be taken from that provider and this one
+         * will be ignored.
          *
          * @param keyId the Key Id value.
          * @return this same Builder instance.
@@ -296,7 +312,9 @@ public final class JWTCreator {
          * @param algorithm used to sign the JWT
          * @return a new JWT token
          * @throws IllegalArgumentException if the provided algorithm is null.
-         * @throws JWTCreationException     if the claims could not be converted to a valid JSON or there was a problem with the signing key.
+         * @throws JWTCreationException     if the claims could not be converted to a
+         *                                  valid JSON or there was a problem with the
+         *                                  signing key.
          */
         public String sign(Algorithm algorithm) throws IllegalArgumentException, JWTCreationException {
             if (algorithm == null) {
@@ -330,7 +348,8 @@ public final class JWTCreator {
         String header = Base64.encodeBase64URLSafeString(headerJson.getBytes(StandardCharsets.UTF_8));
         String payload = Base64.encodeBase64URLSafeString(payloadJson.getBytes(StandardCharsets.UTF_8));
 
-        byte[] signatureBytes = algorithm.sign(header.getBytes(StandardCharsets.UTF_8), payload.getBytes(StandardCharsets.UTF_8));
+        byte[] signatureBytes = algorithm.sign(header.getBytes(StandardCharsets.UTF_8),
+                payload.getBytes(StandardCharsets.UTF_8));
         String signature = Base64.encodeBase64URLSafeString((signatureBytes));
 
         return String.format("%s.%s.%s", header, payload, signature);
