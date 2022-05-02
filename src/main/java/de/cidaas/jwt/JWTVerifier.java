@@ -1,16 +1,27 @@
 package de.cidaas.jwt;
 
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import de.cidaas.jwt.algorithms.Algorithm;
-import de.cidaas.jwt.exceptions.*;
+import de.cidaas.jwt.exceptions.AlgorithmMismatchException;
+import de.cidaas.jwt.exceptions.InvalidClaimException;
+import de.cidaas.jwt.exceptions.JWTVerificationException;
+import de.cidaas.jwt.exceptions.SignatureVerificationException;
+import de.cidaas.jwt.exceptions.TokenExpiredException;
 import de.cidaas.jwt.impl.JWTParser;
 import de.cidaas.jwt.impl.PublicClaims;
 import de.cidaas.jwt.interfaces.Claim;
 import de.cidaas.jwt.interfaces.Clock;
 import de.cidaas.jwt.interfaces.DecodedJWT;
 import de.cidaas.jwt.interfaces.Verification;
-
-import java.util.*;
 
 /**
  * The JWTVerifier class holds the verify method to assert that a given Token has not only a proper JWT format, but also it's signature matches.
@@ -399,7 +410,7 @@ public final class JWTVerifier implements de.cidaas.jwt.interfaces.JWTVerifier {
         for (Map.Entry<String, Object> entry : claims.entrySet()) {
             switch (entry.getKey()) {
                 case PublicClaims.AUDIENCE:
-                    assertValidAudienceClaim(jwt.getAudience(), (List<String>) entry.getValue());
+                    assertValidAudienceClaim(jwt.getAudience(), Stream.of(entry.getValue()).map(Object::toString).collect(Collectors.toList()));
                     break;
                 case PublicClaims.EXPIRES_AT:
                     assertValidDateClaim(jwt.getExpiresAt(), (Long) entry.getValue(), true);
@@ -411,7 +422,7 @@ public final class JWTVerifier implements de.cidaas.jwt.interfaces.JWTVerifier {
                     assertValidDateClaim(jwt.getNotBefore(), (Long) entry.getValue(), false);
                     break;
                 case PublicClaims.ISSUER:
-                    assertValidIssuerClaim(jwt.getIssuer(), (List<String>) entry.getValue());
+                    assertValidIssuerClaim(jwt.getIssuer(), Stream.of(entry.getValue()).map(Object::toString).collect(Collectors.toList()));
                     break;
                 case PublicClaims.JWT_ID:
                     assertValidStringClaim(entry.getKey(), jwt.getId(), (String) entry.getValue());

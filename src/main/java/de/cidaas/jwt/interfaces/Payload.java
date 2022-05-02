@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import de.cidaas.jwt.interfaces.Claim;
-
 /**
  * The Payload class represents the 2nd part of the JWT, where the Payload value is hold.
  */

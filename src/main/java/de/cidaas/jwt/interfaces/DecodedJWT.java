@@ -1,8 +1,5 @@
 package de.cidaas.jwt.interfaces;
 
-import de.cidaas.jwt.interfaces.Header;
-import de.cidaas.jwt.interfaces.Payload;
-
 /**
  * Class that represents a Json Web Token that was decoded from it's string representation.
  */

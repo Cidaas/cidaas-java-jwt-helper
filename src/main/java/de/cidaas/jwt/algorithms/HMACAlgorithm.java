@@ -63,14 +63,4 @@ class HMACAlgorithm extends Algorithm {
             throw new SignatureGenerationException(this, e);
         }
     }
-
-    @Override
-    @Deprecated
-    public byte[] sign(byte[] contentBytes) throws SignatureGenerationException {
-        try {
-            return crypto.createSignatureFor(getDescription(), secret, contentBytes);
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new SignatureGenerationException(this, e);
-        }
-    }
 }

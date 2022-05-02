@@ -1,7 +1,6 @@
 package de.cidaas.jwt.interfaces;
 
 import de.cidaas.jwt.exceptions.JWTVerificationException;
-import de.cidaas.jwt.interfaces.DecodedJWT;
 
 
 public interface JWTVerifier {

@@ -1,8 +1,6 @@
 package de.cidaas.jwt.interfaces;
 
 import de.cidaas.jwt.exceptions.JWTDecodeException;
-import de.cidaas.jwt.interfaces.Header;
-import de.cidaas.jwt.interfaces.Payload;
 
 /**
  * The JWTPartsParser class defines which parts of the JWT should be converted to it's specific Object representation instance.

@@ -5,13 +5,6 @@ import static de.cidaas.jwk.UrlJwkProvider.urlForDomain;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import de.cidaas.jwk.BucketImpl;
-import de.cidaas.jwk.GuavaCachedJwkProvider;
-import de.cidaas.jwk.JwkProvider;
-import de.cidaas.jwk.JwkProviderBuilder;
-import de.cidaas.jwk.RateLimitedJwkProvider;
-import de.cidaas.jwk.UrlJwkProvider;
-
 @SuppressWarnings("WeakerAccess")
 public class JwkProviderBuilder {
 
