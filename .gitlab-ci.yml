@@ -10,6 +10,9 @@ stages:
   - badges
   - deploy
 
+test:
+  extends: .test
+
 maven_build:
   extends: build
   image: maven:3-openjdk-11
