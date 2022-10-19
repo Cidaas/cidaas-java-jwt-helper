@@ -4,12 +4,16 @@ include:
     file: java/java-mvn-lib.yml
 
 stages:
+  - prepare
   - test
   - build
   - release
   - badges
   - deploy
 
+test:
+  extends: .test
+
 maven_build:
-  extends: build
+  extends: .build
   image: maven:3-openjdk-11
