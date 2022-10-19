@@ -4,6 +4,7 @@ include:
     file: java/java-mvn-lib.yml
 
 stages:
+  - prepare
   - test
   - build
   - release
