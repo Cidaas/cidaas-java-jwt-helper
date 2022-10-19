@@ -111,12 +111,14 @@
 			</activation>
 			<distributionManagement>
 				<repository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+					<id>wcorporate.gitlab</id>
+					<name>Widas Internal Corporate Repository</name>
+					<url>https://gitlab.widas.de/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
 				</repository>
 				<snapshotRepository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+					<id>wcorporate.gitlab</id>
+					<name>Widas Snapshots Corporate Repository</name>
+					<url>https://gitlab.widas.de/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
 				</snapshotRepository>
 			</distributionManagement>
 			<build>
