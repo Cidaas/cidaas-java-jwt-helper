@@ -1,6 +1,5 @@
 include:
   - project: widas/software-quality/gitlab-template-projects/widas-customer-ci-templates
-    ref: master
     file: java/java-mvn-lib.yml
 
 stages:
@@ -11,7 +10,8 @@ stages:
   - badges
   - deploy
 
+test:
+  extends: .test
 
-maven_build:
+build:
   extends: .build
-  image: maven:3-openjdk-11
