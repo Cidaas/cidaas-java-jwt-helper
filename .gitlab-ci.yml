@@ -10,8 +10,36 @@ stages:
   - badges
   - deploy
 
+get_prereqiusites:
+  before_script:
+    - rm -rf common-templates
+
 test:
   extends: .test
+
+code_quality_json:
+  image: docker:git
+  stage: test
+  allow_failure: true
+  variables:
+    CODE_QUALITY_IMAGE: "codeclimate/codeclimate:latest"
+    QUALITY_BASE_REPO: https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.widas.de/widas/codequality.git
+  script:
+    - docker pull "$CODE_QUALITY_IMAGE"
+    - git clone ${QUALITY_BASE_REPO}
+    - cp codequality/conf/codeclimate/rules/java/.codeclimate.yml .
+    - rm -rf codequality
+    - docker run 
+       --env SOURCE_CODE="$PWD"
+       --env CODECLIMATE_CODE="$PWD"
+       --volume "$PWD":/code 
+       --volume /var/run/docker.sock:/var/run/docker.sock 
+       --volume /tmp/cc:/tmp/cc 
+       "$CODE_QUALITY_IMAGE" analyze -f json > gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json
+    paths: [gl-code-quality-report.json]
 
 build:
   extends: .build
