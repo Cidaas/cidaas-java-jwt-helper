@@ -10,6 +10,10 @@ stages:
   - badges
   - deploy
 
+get_prereqiusites:
+  before_script:
+    - rm rf common-templates
+
 test:
   extends: .test
 
