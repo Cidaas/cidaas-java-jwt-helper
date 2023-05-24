@@ -12,7 +12,7 @@ stages:
 
 get_prereqiusites:
   before_script:
-    - rm rf common-templates
+    - rm -rf common-templates
 
 test:
   extends: .test
