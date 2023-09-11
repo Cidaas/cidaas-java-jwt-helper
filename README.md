@@ -13,3 +13,4 @@ To upload a new release to maven central, please use the command: `mvn clean dep
 Also for this step, we need to have some credentials in the settings.xml and have install gpg on the local machine. 
 
 Please look at [this guide](https://gitlab.widas.de/cidaas-public-devkits/cidaas-public-devkit-documentation/-/wikis/How-to-deploy-java-artifacts-to-maven-central-repository) for more information!
+
