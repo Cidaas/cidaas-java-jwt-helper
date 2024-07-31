@@ -20,7 +20,7 @@ test:
   artifacts:
     expire_in: 1 hrs
     paths:
-      - runtime/target/site/jacoco/*
+      - target/*
 
 build:
   extends: .build
