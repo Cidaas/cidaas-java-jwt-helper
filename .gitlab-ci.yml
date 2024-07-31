@@ -15,7 +15,16 @@ get_prereqiusites:
     - rm -rf common-templates
 
 test:
-  extends: .test
+  stage: test
+  image: maven:3-openjdk-17
+  script:
+      - mvn test
+      - awk -F"," '{ covered += $5; total += $4 + $5 } END { print covered, "/", total, "instructions covered"; printf "%s %0.2f", "code coverage:", 100*covered/total; print "%" }' target/site/jacoco/jacoco.csv
+  coverage: '/code coverage: ([\d\.]+)%/'
+  artifacts:
+    expire_in: 1 hrs
+    paths:
+      - target/*
 
 code_quality_json:
   image: docker:git
